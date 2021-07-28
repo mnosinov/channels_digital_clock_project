@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Djnago Channel Tutorials</title>
+	<script>
+		socket = new WebSocket("ws://localhost:8000/msg/");
+		socket.onmessage = function(e) {
+			var data = JSON.parse(e.data);
+			document.querySelector('#msg').innerText = data.timeValue;
+		}
+	</script>
+</head>
+<body>
+	<center>
+		<h1 style="color:blue" id="msg">{{ text }}</h1>
+	</center>
+</body>
+</html>

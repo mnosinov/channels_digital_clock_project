@@ -1,16 +1,21 @@
-"""
-ASGI config for channels_digital_clock_project project.
-
-It exposes the ASGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/3.2/howto/deployment/asgi/
-"""
-
 import os
 
+# import get_asgi_application to handle http protocol
 from django.core.asgi import get_asgi_application
 
+# import ProtocolTypeRouter and URLRouter to set the websocket routing
+from channels.routing import ProtocolTypeRouter, URLRouter
+
+# import AuthMiddlewareStack to handle websocket
+from channels.auth import AuthMiddlewareStack
+
+# import websocket routing
+from socketapp.routing import ws_urlpatterns
+
+# assign value for DJANGO_SETTINGS_MODULE
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'channels_digital_clock_project.settings')
 
-application = get_asgi_application()
+application = ProtocolTypeRouter({
+    'http': get_asgi_application(),
+    'websocket': AuthMiddlewareStack(URLRouter(ws_urlpatterns))
+})
